@@ -1,8 +1,7 @@
 import React from 'react';
 import TodoListItem from './TodoListItem';
 
-const TodoList = ({ todoList, onCompleteTodo }) => {
-  // console.log(todoList);
+const TodoList = ({ todoList, onCompleteTodo, onUpdateTodo }) => {
   const filteredTodo = todoList.filter((todo) => !todo.isCompleted);
   return (
     <>
@@ -15,6 +14,7 @@ const TodoList = ({ todoList, onCompleteTodo }) => {
               key={todo.id}
               todo={todo}
               onCompleteTodo={onCompleteTodo}
+              onUpdateTodo={onUpdateTodo}
             />
           ))}
         </ul>

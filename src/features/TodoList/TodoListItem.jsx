@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import TextInputWithLabel from '../../shared/TextInputWithLabel';
-const TodoListItem = ({ todo, onCompleteTodo }) => {
+const TodoListItem = ({ todo, onCompleteTodo, onUpdateTodo }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [workingTitle, setWorkingTitle] = useState(todo.title);
   const handleCancel = () => {
@@ -10,6 +10,15 @@ const TodoListItem = ({ todo, onCompleteTodo }) => {
   const handleEdit = (event) => {
     setWorkingTitle(event.target.value);
   };
+  const handleUpdate = (event) => {
+    event.preventDefault();
+    if (!isEditing) {
+      return;
+    }
+
+    onUpdateTodo({ ...todo, title: workingTitle });
+    setIsEditing(false);
+  };
   return (
     <li>
       <form>
@@ -17,10 +26,13 @@ const TodoListItem = ({ todo, onCompleteTodo }) => {
           <>
             <TextInputWithLabel
               value={workingTitle}
-              onChange={() => handleEdit(event)}
+              onChange={(event) => handleEdit(event)}
             />
             <button type="button" onClick={() => handleCancel()}>
               Cancel
+            </button>
+            <button type="Submit" onClick={handleUpdate}>
+              Update
             </button>
           </>
         ) : (
@@ -31,7 +43,7 @@ const TodoListItem = ({ todo, onCompleteTodo }) => {
               checked={todo.isCompleted}
               onChange={() => onCompleteTodo(todo.id)}
             />
-            <span onClick={() => setIsEditing(true)}>{todo.title}</span>
+            <span onClick={() => setIsEditing(true)}>{workingTitle}</span>
           </>
         )}
       </form>
