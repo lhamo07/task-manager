@@ -5,10 +5,13 @@ import TodoList from './features/TodoList/TodoList';
 import { TodosViewForm } from './features/TodosViewForm';
 const url = `https://api.airtable.com/v0/${import.meta.env.VITE_BASE_ID}/${import.meta.env.VITE_TABLE_NAME}`;
 
-const encodeUrl = ({ sortField, sortDirection }) => {
+const encodeUrl = ({ sortField, sortDirection, queryString }) => {
   let sortQuery = `sort[0][field]=${sortField}&sort[0][direction]=${sortDirection}`;
-
-  return encodeURI(`${url}?${sortQuery}`);
+  let searchQuery = '';
+  if (queryString) {
+    searchQuery = `&filterByFormula=SEARCH("${queryString}",+title)`;
+  }
+  return encodeURI(`${url}?${sortQuery}${searchQuery}`);
 };
 // const encodeencodeUrl() = ({ sortField, sortDirection }) => {};
 
@@ -20,6 +23,7 @@ function App() {
   const [isSaving, setIssaving] = useState(false);
   const [sortField, setSortField] = useState('createdTime');
   const [sortDirection, setSortDirection] = useState('desc');
+  const [queryString, setQueryString] = useState('');
   const token = `Bearer ${import.meta.env.VITE_PAT}`;
   useEffect(() => {
     const fetchTodos = async () => {
@@ -30,7 +34,7 @@ function App() {
       };
       try {
         const resp = await fetch(
-          `${encodeUrl({ sortField, sortDirection })}`,
+          `${encodeUrl({ sortField, sortDirection, queryString })}`,
           options
         );
         if (!resp.ok) {
@@ -57,7 +61,7 @@ function App() {
       }
     };
     fetchTodos();
-  }, [sortDirection, sortField, token]);
+  }, [sortDirection, sortField, queryString, token]);
 
   const addTodo = async (title) => {
     const newTodo = { title: title, id: Date.now(), isCompleted: false };
@@ -79,7 +83,7 @@ function App() {
     try {
       setIssaving(true);
       const resp = await fetch(
-        `${encodeUrl({ sortField, sortDirection })}`,
+        `${encodeUrl({ sortField, sortDirection, queryString })}`,
         options
       );
       if (!resp.ok) {
@@ -149,7 +153,7 @@ function App() {
     };
     try {
       const resp = await fetch(
-        `${encodeUrl({ sortField, sortDirection })}`,
+        `${encodeUrl({ sortField, sortDirection, queryString })}`,
         options
       );
       if (!resp.ok) {
@@ -181,6 +185,8 @@ function App() {
         setSortDirection={setSortDirection}
         sortField={sortField}
         setSortField={setSortField}
+        queryString={queryString}
+        setQueryString={setQueryString}
       />
       {errorMessage !== '' && (
         <div>
