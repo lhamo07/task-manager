@@ -2,14 +2,24 @@ import { useEffect, useState } from 'react';
 import './App.css';
 import TodoForm from './features/TodoForm';
 import TodoList from './features/TodoList/TodoList';
+import { TodosViewForm } from './features/TodosViewForm';
+const url = `https://api.airtable.com/v0/${import.meta.env.VITE_BASE_ID}/${import.meta.env.VITE_TABLE_NAME}`;
+
+const encodeUrl = ({ sortField, sortDirection }) => {
+  let sortQuery = `sort[0][field]=${sortField}&sort[0][direction]=${sortDirection}`;
+
+  return encodeURI(`${url}?${sortQuery}`);
+};
+// const encodeencodeUrl() = ({ sortField, sortDirection }) => {};
+
 function App() {
   const [todoList, setTodoList] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
   const [todoRecord, setTodoRecords] = useState([]);
   const [isSaving, setIssaving] = useState(false);
-
-  const url = `https://api.airtable.com/v0/${import.meta.env.VITE_BASE_ID}/${import.meta.env.VITE_TABLE_NAME}`;
+  const [sortField, setSortField] = useState('createdTime');
+  const [sortDirection, setSortDirection] = useState('desc');
   const token = `Bearer ${import.meta.env.VITE_PAT}`;
   useEffect(() => {
     const fetchTodos = async () => {
@@ -19,7 +29,10 @@ function App() {
         headers: { Authorization: token, 'Content-Type': 'application/json' },
       };
       try {
-        const resp = await fetch(`${url}`, options);
+        const resp = await fetch(
+          `${encodeUrl({ sortField, sortDirection })}`,
+          options
+        );
         if (!resp.ok) {
           throw new Error(resp.message);
         }
@@ -44,7 +57,7 @@ function App() {
       }
     };
     fetchTodos();
-  }, []);
+  }, [sortDirection, sortField, token]);
 
   const addTodo = async (title) => {
     const newTodo = { title: title, id: Date.now(), isCompleted: false };
@@ -65,7 +78,10 @@ function App() {
 
     try {
       setIssaving(true);
-      const resp = await fetch(`${url}`, options);
+      const resp = await fetch(
+        `${encodeUrl({ sortField, sortDirection })}`,
+        options
+      );
       if (!resp.ok) {
         throw new Error(resp.message);
       }
@@ -87,6 +103,10 @@ function App() {
       setIssaving(false);
     }
   };
+  // const ff = decodeURI(
+  //   'https://api.airtable.com/v0/airtable_table_id/Todos?sort%5B0%5D%5Bfield%5D=createdTime&sort%5B0%5D%5Bdirection%5D=desc'
+  // );
+  // console.log(ff);
   const completeTodo = (id) => {
     const updateTodo = todoRecord.map((todo) => {
       if (id === todo.id) {
@@ -128,7 +148,10 @@ function App() {
       body: JSON.stringify(payload),
     };
     try {
-      const resp = await fetch(`${url}`, options);
+      const resp = await fetch(
+        `${encodeUrl({ sortField, sortDirection })}`,
+        options
+      );
       if (!resp.ok) {
         throw new Error(resp.message);
       }
@@ -151,6 +174,13 @@ function App() {
         onCompleteTodo={completeTodo}
         onUpdateTodo={updateTodo}
         isLoading={isLoading}
+      />
+      <hr></hr>
+      <TodosViewForm
+        sortDirection={sortDirection}
+        setSortDirection={setSortDirection}
+        sortField={sortField}
+        setSortField={setSortField}
       />
       {errorMessage !== '' && (
         <div>
