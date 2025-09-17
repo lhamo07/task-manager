@@ -1,0 +1,28 @@
+h1 {
+  color: rgb(24 68 107);
+  text-align: center;
+}
+.logo {
+  width: 50px;
+  height: 50px;
+}
+.title {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+.main-container {
+  background-color: rgb(236 245 252 / 52%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-size: large;
+  padding: 2rem;
+  margin: 0 222px;
+}
+.errorMessage {
+  border: 2px solid #edcccd;
+  color: #8f2f33;
+  background-color: #ffeced;
+}

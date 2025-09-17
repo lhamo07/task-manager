@@ -1,7 +1,34 @@
 import React, { useEffect } from 'react';
 import { useState } from 'react';
+import TextInputWithLabel from '../shared/TextInputWithLabel';
+import styled from 'styled-components';
+const StyledButton = styled.button`
+  background-color: #18446b !important;
+  color: white;
+  padding: 5px;
+  border-radius: 5px;
+  border: none;
+  margin-left: 5px;
+  &:hover {
+    background-color: #0f2a3e !important;
+`;
+const StyledDiv = styled.div`
+  padding-top: 10px;
+`;
+const StyledLabel = styled.label`
+  margin: 5px;
+  font-size: 16px;
+  font-weight: 600px;
+`;
+const StyledSelect = styled.select`
+  border:
+    1px,
+    solid #bedcfb;
+  padding: 5px;
+  border-radius: 5px;
+  background-color: rgb(236 245 252 / 87%);
+`;
 export const TodosViewForm = ({
-  sortDirection,
   setSortDirection,
   sortField,
   setSortField,
@@ -23,22 +50,22 @@ export const TodosViewForm = ({
   return (
     <>
       <div>
-        <label>Search todos</label>
-        <input
+        <StyledLabel>Search todos</StyledLabel>
+        <TextInputWithLabel
           type="text"
           value={localQueryString}
           onChange={(e) => {
             setLocalQueryString(e.target.value);
           }}
         />
-        <button type="button" onClick={() => setLocalQueryString('')}>
+        <StyledButton type="button" onClick={() => setLocalQueryString('')}>
           Clear
-        </button>
+        </StyledButton>
       </div>
-      <div>
+      <StyledDiv>
         <form onSubmit={preventRefresh}>
-          <label>Sort By</label>
-          <select
+          <StyledLabel>Sort By</StyledLabel>
+          <StyledSelect
             onChange={(event) => {
               setSortField(event.target.value);
             }}
@@ -46,18 +73,18 @@ export const TodosViewForm = ({
           >
             <option value="title">Title</option>
             <option value="createdTime">Time Added</option>
-          </select>
-          <label>Direction</label>
-          <select
+          </StyledSelect>
+          <StyledLabel>Direction</StyledLabel>
+          <StyledSelect
             onChange={(event) => {
               setSortDirection(event.target.value);
             }}
           >
             <option value="asc">Ascending</option>
             <option value="desc">Desceding</option>
-          </select>
+          </StyledSelect>
         </form>
-      </div>
+      </StyledDiv>
     </>
   );
 };

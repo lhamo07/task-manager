@@ -4,17 +4,9 @@ import TodoForm from './features/TodoForm';
 import TodoList from './features/TodoList/TodoList';
 import { TodosViewForm } from './features/TodosViewForm';
 import { useCallback } from 'react';
+import style from './App.module.css';
+import Logo from './assets/task.png';
 const url = `https://api.airtable.com/v0/${import.meta.env.VITE_BASE_ID}/${import.meta.env.VITE_TABLE_NAME}`;
-
-// const encodeUrl = ({ sortField, sortDirection, queryString }) => {
-//   let sortQuery = `sort[0][field]=${sortField}&sort[0][direction]=${sortDirection}`;
-//   let searchQuery = '';
-//   if (queryString) {
-//     searchQuery = `&filterByFormula=SEARCH("${queryString}",+title)`;
-//   }
-//   return encodeURI(`${url}?${sortQuery}${searchQuery}`);
-// };
-// const encodeencodeUrl() = ({ sortField, sortDirection }) => {};
 
 function App() {
   const [todoList, setTodoList] = useState([]);
@@ -170,32 +162,39 @@ function App() {
   };
 
   return (
-    <div>
-      <h1>My Todos</h1>
-      <TodoForm onAddTodo={addTodo} isSaving={isSaving} />
-      <TodoList
-        todoList={todoRecord}
-        onCompleteTodo={completeTodo}
-        onUpdateTodo={updateTodo}
-        isLoading={isLoading}
-      />
-      <hr></hr>
-      <TodosViewForm
-        sortDirection={sortDirection}
-        setSortDirection={setSortDirection}
-        sortField={sortField}
-        setSortField={setSortField}
-        queryString={queryString}
-        setQueryString={setQueryString}
-      />
-      {errorMessage !== '' && (
-        <div>
-          <hr />
-          <p>{errorMessage}</p>
-          <button onClick={() => setErrorMessage('')}>Dismiss</button>
-        </div>
-      )}
-    </div>
+    <>
+      <div className={style.title}>
+        {' '}
+        <img src={Logo} className={style.logo} />
+        <h1>Todo App</h1>
+      </div>
+
+      <div className={style[`main-container`]}>
+        <TodoForm onAddTodo={addTodo} isSaving={isSaving} />
+        <TodoList
+          todoList={todoRecord}
+          onCompleteTodo={completeTodo}
+          onUpdateTodo={updateTodo}
+          isLoading={isLoading}
+        />
+        <hr></hr>
+        <TodosViewForm
+          sortDirection={sortDirection}
+          setSortDirection={setSortDirection}
+          sortField={sortField}
+          setSortField={setSortField}
+          queryString={queryString}
+          setQueryString={setQueryString}
+        />
+        {errorMessage !== '' && (
+          <div>
+            <hr />
+            <p className={style.errorMessage}>{errorMessage}</p>
+            <button onClick={() => setErrorMessage('')}>Dismiss</button>
+          </div>
+        )}
+      </div>
+    </>
   );
 }
 

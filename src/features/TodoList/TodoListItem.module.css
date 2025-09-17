@@ -1,0 +1,12 @@
+.textInput {
+  width: 100%;
+  padding: 8px;
+  font-size: 16px;
+  background-color: aqua;
+}
+span {
+  font-size: 16px;
+  letter-spacing: 0.5px;
+  display: inline-block;
+  margin: 5px;
+}
