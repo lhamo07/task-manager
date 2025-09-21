@@ -192,7 +192,7 @@ function App() {
         <h1>Todo App</h1>
       </div>
 
-      <div className={style[`main-container`]}>
+      <div className={style.mainContainer}>
         <TodoForm onAddTodo={addTodo} isSaving={isSaving} />
         <TodoList
           todoList={todoRecord}
