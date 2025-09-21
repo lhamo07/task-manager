@@ -102,30 +102,53 @@ function App() {
       setIssaving(false);
     }
   };
-  // const ff = decodeURI(
-  //   'https://api.airtable.com/v0/airtable_table_id/Todos?sort%5B0%5D%5Bfield%5D=createdTime&sort%5B0%5D%5Bdirection%5D=desc'
-  // );
-  // console.log(ff);
-  const completeTodo = (id) => {
-    const updateTodo = todoRecord.map((todo) => {
-      if (id === todo.id) {
-        return {
-          ...todo,
-          isCompleted: true,
-        };
+
+  const completeTodo = async (id) => {
+    const originalTodos = [...todoRecord];
+    const todoToUpdate = todoRecord.find((todo) => todo.id === id);
+
+    const updatedTodos = todoRecord.map((todo) => {
+      if (todo.id === id) {
+        return { ...todo, isCompleted: !todo.isCompleted };
       }
       return todo;
     });
-    setTodoRecords(updateTodo);
+    setTodoRecords(updatedTodos);
+
+    const payload = {
+      records: [
+        {
+          id: id,
+          fields: {
+            title: todoToUpdate.title,
+            isCompleted: !todoToUpdate.isCompleted,
+          },
+        },
+      ],
+    };
+
+    const options = {
+      method: 'PATCH',
+      headers: {
+        Authorization: token,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(payload),
+    };
+
+    try {
+      const resp = await fetch(`${encodeUrl()}`, options);
+      if (!resp.ok) {
+        throw new Error(resp.message);
+      }
+    } catch (error) {
+      console.error(error);
+      setErrorMessage(`${error.message}. Reverting todo...`);
+      setTodoRecords(originalTodos);
+    }
   };
+
   const updateTodo = async (editedTodo) => {
-    // const updatedTodos = todoRecord.map((todo) => {
-    //   if (todo.id === editedTodo.id) {
-    //     return { ...editedTodo };
-    //   }
-    //   return todo;
-    // });
-    // console.log(updatedTodos);
     const originalTodo = todoRecord.find((todo) => todo.id === editedTodo.id);
     const payload = {
       records: [
