@@ -1,0 +1,16 @@
+.active {
+  color: rgb(24 68 107);
+}
+.inActive {
+  color: grey;
+}
+nav {
+  display: flex;
+  gap: 20px;
+  justify-content: flex-end;
+  margin-right: 223px;
+  margin-bottom: 25px;
+}
+nav a {
+  text-decoration: none;
+}
