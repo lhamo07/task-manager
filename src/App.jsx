@@ -181,6 +181,7 @@ function App() {
                 updateTodo={updateTodo}
                 state={state}
                 sortDirection={sortDirection}
+                setSortDirection={setSortDirection}
                 sortField={sortField}
                 setSortField={setSortField}
                 queryString={queryString}

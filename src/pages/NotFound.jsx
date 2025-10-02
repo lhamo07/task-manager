@@ -1,9 +1,6 @@
-import React, { use, useEffect } from 'react';
 import { useNavigate } from 'react-router';
 import styled from 'styled-components';
-const NotFound = () => {
-  const navigate = useNavigate();
-  const StyleGoback = styled.button`
+const StyleGoback = styled.button`
     background-color: #18446b !important;
     color: white;
     padding: 5px;
@@ -13,9 +10,13 @@ const NotFound = () => {
      &:hover {
     background-color: #0f2a3e !important;
   `;
-  const MainContainer = styled.div`
-    text-align: center;
-  `;
+const MainContainer = styled.div`
+  text-align: center;
+`;
+
+const NotFound = () => {
+  const navigate = useNavigate();
+
   return (
     <MainContainer>
       <h1>404</h1>

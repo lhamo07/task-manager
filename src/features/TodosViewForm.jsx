@@ -29,8 +29,8 @@ const StyledSelect = styled.select`
   background-color: rgb(236 245 252 / 87%);
 `;
 export const TodosViewForm = ({
-  setSortDirection,
   sortField,
+  setSortDirection,
   setSortField,
   queryString,
   setQueryString,
